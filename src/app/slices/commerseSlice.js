@@ -3,10 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   products: [],
   token: '',
-  cartProducts: [],
   price: 0,
 };
-
 
 export const commerseSlice = createSlice({
   name: 'userInfo',
@@ -15,36 +13,17 @@ export const commerseSlice = createSlice({
     allProductsStore: (state, action) => {
       state.products = action.payload;
     },
-    addCart: (state, action) => {
-      state.cartProducts.push(action.payload);
-    },
+
     getToken: (state, action) => {
       state.token = action.payload;
     },
-
-    increment: (state, action) => {
-      // state.cartProducts.count += 1;
-      console.log(state.cartProducts);
-      // console.log(state.products);
-    },
-    decrement: (state, action) => {
-      state.cartProducts.count -= 1;
-    },
-
-    deleteProduct: (state, action) => {
-      state.cartProducts = state.cartProducts.filter(
-        (product) => product.id !== action.payload
-      );
+    addProduct: (state, action) => {
+      state.products.push(action.payload);
+      console.log(action.payload);
     },
   },
 });
 
-export const {
-  allProductsStore,
-  addCart,
-  increment,
-  decrement,
-  deleteProduct,
-} = commerseSlice.actions;
+export const { allProductsStore, addCart, addProduct } = commerseSlice.actions;
 
 export default commerseSlice.reducer;

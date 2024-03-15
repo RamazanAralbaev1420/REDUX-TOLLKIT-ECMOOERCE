@@ -1,11 +1,13 @@
 import { Button, IconButton, TextField } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { addProduct } from '../app/slices/commerseSlice';
 
 const Profile = () => {
+  const products = useSelector((state) => state.products.products);
   const [titleVal, setTitleVal] = useState('');
   const [descrVal, setDescrVal] = useState('');
   const navigate = useNavigate();
@@ -15,18 +17,25 @@ const Profile = () => {
     navigate(-1);
   };
 
-  const addProduct = async () => {
-    console.log('added');
-    await dispatch(
-      addProduct({
-        images: [
-          'https://upload.wikimedia.org/wikipedia/commons/8/8b/Cristiano_Ronaldo_WC2022_-_01_%28cropped%29.jpg',
-        ],
-        title: titleVal,
-        description: descrVal,
-      })
-    );
+  const addProductFn = () => {
+    const newProduct = {
+      id: Date.now(),
+      images: [
+        'https://upload.wikimedia.org/wikipedia/commons/8/8b/Cristiano_Ronaldo_WC2022_-_01_%28cropped%29.jpg',
+      ],
+      title: titleVal,
+      description: descrVal,
+      price: 0,
+    };
+
+    dispatch(addProduct(newProduct));
+    console.log(products);
   };
+
+  // useEffect(() => {
+  //   addProductFn()
+  // }, [])
+
   return (
     <div className="profile">
       <div className="container">
@@ -52,7 +61,7 @@ const Profile = () => {
               onChange={(e) => setDescrVal(e.target.value)}
             />
           </div>
-          <Button onClick={addProduct} color="success">
+          <Button onClick={addProductFn} color="success">
             Add Product
           </Button>
         </div>

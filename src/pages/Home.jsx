@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCart, allProductsStore } from '../app/slices/commerseSlice';
+import { allProductsStore } from '../app/slices/commerseSlice';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -19,10 +19,11 @@ import {
   Snackbar,
   Alert,
 } from '@mui/material';
+import { addCart } from '../app/slices/cartProductsSlice';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const cartProducts = useSelector((state) => state.products.cartProducts);
+  const cartProducts = useSelector((state) => state.cartProducts.cartProducts);
   // const store = useSelector((state) => state.products);
   const [allProducts, setAllProducts] = useState([]);
   const [searchValue, setSearchValue] = useState('');
@@ -48,15 +49,16 @@ const Home = () => {
   };
 
   const addCartBtn = (product) => {
-    setOpen(true);
-
-    dispatch(addCart({ ...product, count: 1 }));
-    console.log(product);
+    const existingProduct = cartProducts.find((item) => item.id === product.id);
+    if (!existingProduct) {
+      dispatch(addCart({ ...product, count: 1 }));
+      setOpen(true);
+    } 
   };
 
   useEffect(() => {
     homeProducts();
-  }, [age]);
+  }, [age, cartProducts]);
 
   // select
 

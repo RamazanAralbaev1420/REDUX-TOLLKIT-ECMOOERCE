@@ -9,13 +9,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Menu, MenuItem } from '@mui/material';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function ButtonAppBar() {
-  const cartProducts = useSelector((state) => state.products.cartProducts);
+  const cartProducts = useSelector((state) => state.cartProducts.cartProducts);
   const [userId, setUserId] = React.useState(
     window.localStorage.getItem('userId')
   );
+  const dispatch = useDispatch();
   const [token, setToken] = React.useState(
     window.localStorage.getItem('token')
   );

@@ -2,12 +2,19 @@ import { Button, IconButton } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router';
-import { deleteProduct, increment } from '../app/slices/commerseSlice';
 import DeleteIcon from '@mui/icons-material/Delete';
+import {
+  increment,
+  decrement,
+  deleteProduct,
+  priceProductsAll,
+  clearProducts,
+} from '../app/slices/cartProductsSlice';
+import { useEffect } from 'react';
 const CartProducts = () => {
-  const store = useSelector((state) => state.products);
-  let cartProducts = useSelector((state) => state.products.cartProducts);
-  let priceProducts = useSelector((state) => state.products.price);
+  const store = useSelector((state) => state.cartProducts);
+  let cartProducts = useSelector((state) => state.cartProducts.cartProducts);
+  let priceProducts = useSelector((state) => state.cartProducts.price);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const backPage = () => {
@@ -16,7 +23,9 @@ const CartProducts = () => {
 
   const addHandler = (product) => {
     dispatch(increment(product));
-    // console.log(product);
+  };
+  const decHandler = (product) => {
+    dispatch(decrement(product));
   };
 
   const deleteHandler = (id) => {
@@ -24,12 +33,18 @@ const CartProducts = () => {
     console.log(id);
   };
 
-  const clearCartProducts = () => {
-    cartProducts.length = 0;
-    cartProducts = [];
-    console.log(cartProducts);
+  const summPrice = () => {
+    cartProducts.map((item) => {
+      return (priceProducts += item.price * item.count);
+    });
   };
-  console.log(store.cartProducts);
+  summPrice()
+
+
+
+  const clearCartProducts = () => {
+    dispatch(clearProducts());
+  };
   return (
     <div>
       <div className="container">
@@ -40,15 +55,7 @@ const CartProducts = () => {
           <div className="cardCartProduct">
             <div className="cartInfo">
               <h3>CartProducts</h3>
-              <h3>
-                Price:{' '}
-                {cartProducts.length > 0
-                  ? cartProducts.map(
-                      (item) => (priceProducts += Number(item.price))
-                    )
-                  : `0`}
-                $
-              </h3>
+              <h3>Price: {cartProducts.length > 0 ? priceProducts : `0`}$</h3>
             </div>
             {store.cartProducts.map((product) => {
               return (
@@ -57,11 +64,15 @@ const CartProducts = () => {
                     <img src={product.images[0]} alt="" />
                   </div>
                   <div className="product_title">
-                    <p>{product.title}</p>
+                    <h4>{product.title}</h4>
+                  </div>
+                  <div className="product_price">
+                    <h4>price:{product.price}$</h4>
                   </div>
                   <div className="product_controllers">
-                    <Button color="success">-</Button>
-                    {/* <span>{product.count}</span> */}
+                    <Button color="success" onClick={() => decHandler(product)}>
+                      -
+                    </Button>
                     <span>{product.count}</span>
                     <Button color="success" onClick={() => addHandler(product)}>
                       +

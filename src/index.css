@@ -238,3 +238,7 @@ form h2 {
   left: 50%;
   top: 50%;
 }
+
+.product_price {
+  display: flex;
+}
